@@ -20,7 +20,6 @@ export default class FormDialog extends React.Component {
   }
 
   inputName = (e) => {
-    console.log(e.target.value)
     this.setState({ name: e.target.value })
   }
 
@@ -32,6 +31,35 @@ export default class FormDialog extends React.Component {
     this.setState({ description: e.target.value })
   }
 
+  submitForm = () => {
+    const name = this.state.name
+    const email = this.state.email
+    const description = this.state.description
+
+    const payload = {
+      text: 'お問い合わせがありました\n' +
+            'お名前：' + name + '\n' +
+            'Email：' + email + '\n' +
+            '問い合わせ内容：\n' + description
+    }
+
+    // Slack　Incoming Webhook　URL
+    const url = 'https://hooks.slack.com/services/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'
+
+    // Slackへ通知を送る
+    fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    }).then(() => {
+      alert('送信が完了しました。追ってご連絡差し上げます。')
+      this.setState({
+        name: "",
+        email: "",
+        description: ""
+      })
+      return this.props.handleClose();
+    })
+  }
 
   render() {
     return(
