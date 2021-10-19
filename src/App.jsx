@@ -1,6 +1,6 @@
 import React from 'react';
 import './assets/styles/style.css';
-import { AnswersList } from './components';
+import { AnswersList, Chats } from './components';
 import defaultDataset from './dataset';
 
 export default class App extends React.Component {
@@ -32,6 +32,7 @@ export default class App extends React.Component {
     return (
       <section className="c-section">
         <div className="c-box">
+          <Chats />
           <AnswersList answers={this.state.answers} />
         </div>
       </section>

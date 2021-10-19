@@ -1,5 +1,5 @@
 import React from 'react';
-import { Answer } from '.';
+import { Answer } from './index';
 
 const AnswersList = (props) => {
   return (
