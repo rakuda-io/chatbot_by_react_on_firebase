@@ -19,6 +19,7 @@ const Chats = (props) => {
   return (
     <List
       className={classes.chats}
+      id={"scroll-area"}
     >
       {props.chats.map((value, index) => {
         return <Chat text={value.text} type={value.type} key={index.toString()} />
