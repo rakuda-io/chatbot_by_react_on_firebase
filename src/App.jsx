@@ -35,6 +35,12 @@ export default class App extends React.Component {
       case (nextQuestionId === 'init'):
         setTimeout(() => this.displayNextQuestion(nextQuestionId), 300)
         break;
+      case (/^http*/.test(nextQuestionId)):
+        const a = document.createElement('a');
+        a.href = nextQuestionId;
+        a.target = '_blank'; //別タブで開く
+        a.click();
+        break;
       default:
         const chats = this.state.chats;
         chats.push({
