@@ -1,0 +1,51 @@
+{
+    "init": {
+        "answers": [
+            {"content": "ポートフォリオを見せてください", "nextId": "portfolio"},
+            {"content": "あなたについて教えてください", "nextId": "profile"},
+            {"content": "仕事を頼みたいのですが…", "nextId": "job-offer"},
+            {"content": "一緒に麻雀しましょうよ", "nextId": "mahjong"}
+        ],
+        "question": "こんにちは！どのようなご用件でしょうか？"
+    },
+    "portfolio": {
+        "answers": [
+            {"content": "GitHubを見る", "nextId": "https://github.com/rakuda-io"},
+            {"content": "実際に公開アプリケーションを見る", "nextId": "application"},
+            {"content": "その他問い合わせ", "nextId": "contact"}
+        ],
+        "question": "ありがとうございます。どちらをご覧になられますか？"
+    },
+    "profile": {
+        "answers": [
+            {"content": "職務経歴書を見る", "nextId": "contact"},
+            {"content": "履歴書を見る", "nextId": "contact"},
+            {"content": "Twitterを見る", "nextId": "https://twitter.com/rakuda_io"},
+            {"content": "最初に戻る", "nextId": "init"}
+        ],
+        "question": "現在Webエンジニア転職を目標に頑張ってます。さらに詳しく見ていってください"
+    },
+    "job-offer": {
+        "answers": [
+            {"content": "問い合わせフォームから依頼する", "nextId": "contact"},
+            {"content": "気軽にDMする", "nextId": "https://twitter.com/rakuda_io"},
+            {"content": "最初に戻る", "nextId": "init"}
+        ],
+        "question": "ありがとうございます。精一杯やらせていただきます！！"
+    },
+    "mahjong": {
+        "answers": [
+            {"content": "DMする(Twitter)", "nextId": "https://twitter.com/rakuda_io"},
+            {"content": "最初に戻る", "nextId": "init"}
+        ],
+        "question": "喜んで！日程を合わせたいのでDMください😁"
+    },
+    "application": {
+        "answers": [
+            {"content": "進捗情報を見てみる", "nextId": "https://twitter.com/rakuda_io"},
+            {"content": "問い合わせてみる", "nextId": "contact"},
+            {"content": "最初に戻る", "nextId": "init"}
+        ],
+        "question": "すみません。現在作成中です。少々お待ちください🙇‍♀️"
+    }
+}
