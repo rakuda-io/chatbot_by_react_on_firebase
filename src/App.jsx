@@ -64,7 +64,6 @@ const App = () => {
     setOpen(false)
   },[setOpen])
 
-  //最初のみrenderする処理（ComponentDidMount)
   useEffect(() => {
     (async() => {
       const initDataset = {};
@@ -80,16 +79,14 @@ const App = () => {
       setDataset(initDataset)
       displayNextQuestion(currentId, initDataset[currentId])
     })();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
-  //更新された時毎回行う処理（ComponentDidUpdate)
   useEffect(() => {
     const scrollArea = document.getElementById("scroll-area")
     if (scrollArea) {
       scrollArea.scrollTop = scrollArea.scrollHeight
     }
-  })//毎回行うので第2引数はなし
+  })
 
   return (
     <section className="c-section">
