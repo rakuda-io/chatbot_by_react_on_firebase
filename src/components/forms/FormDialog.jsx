@@ -20,9 +20,9 @@ const FormDialog = (props) => {
     setEmail(e.target.value)
   },[setEmail])
 
-  const inputDescription = useCallback((e) => {
-    setDescription(e.target.value)
-  },[setDescription])
+    const inputDescription = useCallback((e) => {
+      setDescription(e.target.value)
+    },[setDescription])
 
   //メールアドレスの書式をチェックするバリデーション
   const validateEmailFormat = (email) => {
@@ -57,8 +57,7 @@ const FormDialog = (props) => {
             'お名前：' + name + '\n' +
             'メールアドレス：' + email + '\n' +
             '【問い合わせ内容】：\n' + description
-    }
-
+      }
       // Slackへ通知を送る
       fetch(WEBHOOK_URL, {
         method: 'POST',
