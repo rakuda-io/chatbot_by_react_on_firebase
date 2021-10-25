@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import './assets/styles/style.css';
-import { AnswersList, Chats } from './components';
-import FormDialog from './components/forms/FormDialog';
+import { AnswersList, Chats, Loading } from './components';
+import { FormDialog } from './components/forms/index';
 import { db } from './firebase/index';
 
 const App = () => {
@@ -11,19 +11,42 @@ const App = () => {
   const [dataset, setDataset] = useState({});
   const [open, setOpen] = useState(false);
 
+  //新しいチャットを追加するcallback関数
+  const addChats = useCallback((chat) => {
+    setChats(prevChats => {
+      return [...prevChats, chat]
+    })
+  }, [setChats])
+
+  //問い合わせフォームモーダルを開くcallback関数
+  const handleClickOpen = useCallback(() => {
+    setOpen(true)
+  }, [setOpen]);
+
+  //問い合わせフォームモーダルを閉じるcallback関数
+  const handleClose = useCallback(() => {
+    setOpen(false)
+  },[setOpen])
+
+  //次の質問をチャットエリアに表示する関数
   const displayNextQuestion = (nextQuestionId, nextDataset) => {
+    //選択された回答と次の質問をチャットに追加
     addChats({
       text: nextDataset.question,
       type: 'question'
     })
 
+    //次の回答一覧をセット
     setAnswers(nextDataset.answers)
+
+    //現在の質問IDをセット
     setCurrentId(nextQuestionId)
   }
 
+  //回答が選択された時に呼ばれる関数
   const selectAnswer = (selectedAnswer, nextQuestionId) => {
     switch(true) {
-      //contactの場合はダイアログを開く
+      //お問合せが選択された場合はダイアログを開く
       case (nextQuestionId === 'contact'):
         handleClickOpen();
         break;
@@ -36,8 +59,9 @@ const App = () => {
         a.click();
         break;
 
-      //それ以外の場合はチャット画面に選択したチャットを加えて表示
+      //それ以外の場合は選択した回答をチャットを加えて表示
       default:
+        //現在のチャット一覧を取得
         addChats({
           text: selectedAnswer,
           type: 'answer'
@@ -48,23 +72,8 @@ const App = () => {
     }
   }
 
-  const addChats = (chat) => {
-    setChats(prevChats => {
-      return [...prevChats, chat]
-    })
-  }
-
-  //子のコンポーネントに渡さないのでuseCallbackしなくて良い
-  const handleClickOpen = () => {
-    setOpen(true)
-  };
-
-  //子のコンポーネントに渡すのでuseCallback化する
-  const handleClose = useCallback(() => {
-    setOpen(false)
-  },[setOpen])
-
   //最初のみrenderする処理（ComponentDidMount)
+  //最初の質問をチャットエリアに表示する
   useEffect(() => {
     (async() => {
       const initDataset = {};
@@ -77,13 +86,17 @@ const App = () => {
         })
       });
 
-      setDataset(initDataset)
+      //Firestoreから取得したデータセットを反映
+      setDataset(initDataset);
+
+      //最初の質問を表示
       displayNextQuestion(currentId, initDataset[currentId])
     })();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
+  },[]);
 
   //更新された時毎回行う処理（ComponentDidUpdate)
+  //最新のチャットが見えるようにスクロール位置の頂点をスクロール領域の最下部に設定する
   useEffect(() => {
     const scrollArea = document.getElementById("scroll-area")
     if (scrollArea) {
@@ -94,11 +107,17 @@ const App = () => {
   return (
     <section className="c-section">
       <div className="c-box">
-        <Chats chats={chats} />
-        <AnswersList
-          answers={answers}
-          select={selectAnswer}
-        />
+        {(Object.keys(dataset).length === 0) ? (
+          <Loading />
+        ) : (
+          <>
+            <Chats chats={chats} />
+            <AnswersList
+              answers={answers}
+              select={selectAnswer}
+              />
+          </>
+          )}
         <FormDialog open={open} handleClose={handleClose} />
       </div>
     </section>

@@ -6,7 +6,7 @@ const TextInput = (props) => {
     <TextField
       fullWidth={true}
       label={props.label}
-      margin={"dense"}
+      margin="dense"
       multiline={props.multiline}
       rows={props.rows}
       value={props.value}
