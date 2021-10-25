@@ -5,6 +5,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextInput from './TextInput';
+import { WEBHOOK_URL } from '../../webhookConfig';
 
 const FormDialog = (props) => {
   const [name, setName] = useState("")
@@ -19,32 +20,59 @@ const FormDialog = (props) => {
     setEmail(e.target.value)
   },[setEmail])
 
-  const inputDescription = useCallback((e) => {
-    setDescription(e.target.value)
-  },[setDescription])
+    const inputDescription = useCallback((e) => {
+      setDescription(e.target.value)
+    },[setDescription])
+
+  //Emailの正規表現チェック
+  const validateEmailFormat = (email) => {
+    const regex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+    return regex.test(email)
+  }
+
+  //入力欄がBlankか判定
+  const validateRequiredInput = (...args) => {
+    let isBlank = false;
+    for (let i=0; i<args.length; i=(i+1)|0) {
+      if (args[i] === "") {
+        isBlank = true;
+      }
+    }
+    return isBlank
+  }
 
   const submitForm = () => {
-    const payload = {
-      text: 'お問い合わせがありました\n' +
-            'お名前：' + name + '\n' +
-            'メールアドレス：' + email + '\n' +
-            '【問い合わせ内容】：\n' + description
-    }
-
     // Slack　Incoming Webhook　URL
-    const url = 'https://hooks.slack.com/services/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'
+    // const url = 'https://hooks.slack.com/services/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'
+    const isBlank = validateRequiredInput(name, email, description)
+    const isValidEmail = validateEmailFormat(email)
 
-    // Slackへ通知を送る
-    fetch(url, {
-      method: 'POST',
-      body: JSON.stringify(payload)
-    }).then(() => {
-      alert('送信が完了しました。追ってご連絡差し上げます。')
-      setName("")
-      setEmail("")
-      setDescription("")
-      return props.handleClose();
-    })
+    if (isBlank) {
+      alert('必須入力欄が空白です。')
+      return false
+    } else if (!isValidEmail) {
+      alert('メールアドレスの書式が異なります。')
+      return false
+    } else {
+      const payload = {
+        text: 'お問い合わせがありました\n' +
+              'お名前：' + name + '\n' +
+              'メールアドレス：' + email + '\n' +
+              '【問い合わせ内容】：\n' + description
+      }
+
+      // Slackへ通知を送る
+      fetch(WEBHOOK_URL, {
+        method: 'POST',
+        body: JSON.stringify(payload)
+      }).then(() => {
+        alert('送信が完了しました。追ってご連絡差し上げます。')
+        setName("")
+        setEmail("")
+        setDescription("")
+        return props.handleClose();
+      })
+    }
   }
 
   return(
