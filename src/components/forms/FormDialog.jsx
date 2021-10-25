@@ -46,11 +46,11 @@ const FormDialog = (props) => {
     const isValidEmail = validateEmailFormat(email)
 
     if (isBlank) {
-        alert('必須入力欄が空白です。')
-        return false
+      alert('必須入力欄が空白です。')
+      return false
     } else if (!isValidEmail) {
-        alert('メールアドレスの書式が異なります。')
-        return false
+      alert('メールアドレスの書式が異なります。')
+      return false
     } else {
     const payload = {
       text: 'お問い合わせがありました\n' +
